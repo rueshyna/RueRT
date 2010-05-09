@@ -102,20 +102,20 @@ class Color{
 
 class Object{
   public:
-    double r, area;
+    double r;
     Vector3D ray;
     Point center;
     Color color;
     
     Point rayIntersection(Point *screen, Point *eye){
-      Vector3D ray((*s).getX()-(*eye).getZ(),(*s).getY()-(*eye).getY(),(*s).getZ()-(*eye).getZ());
+      Vector3D ray((*eye).getX()-(*screen).getZ(),(*eye).getY()-(*screen).getY(),(*eye).getZ()-(*screen).getZ());
       ray.normalize();
       Point NaN(NAN,NAN,NAN);
 
       double t;
       double a(1);
       double b(2*(ray.getX()*(center.getX()-(*eye).getX())+ray.getY()*(center.getY()-(*eye).getY())+ray.getZ()*(center.getZ()-(*eye).getZ())));
-      double c(pow(center.getX()-(*eye).getX(),2)+pow(center.getY()-(*eye).getY(),2)+pow(center.getZ()-(*eye).getZ(),2));
+      double c(pow(center.getX()-(*eye).getX(),2)+pow(center.getY()-(*eye).getY(),2)+pow(center.getZ()-(*eye).getZ(),2)-pow(r,2));
       double d((pow(b,2)-4*a*c));
 
       if(d < 0){
@@ -148,13 +148,15 @@ class Object{
 
     Object(Point *p, double rr, Color *c):r(rr){
       center = *p;
-      area = r*r*M_PI;
       color = *c;
     }
 };
 
+#define STEP 1;
 class Pixel{
   public:
     Vector3D ray;
     Color color;
+    
+    //Color rayTrace()
 };

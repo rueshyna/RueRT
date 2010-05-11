@@ -77,5 +77,5 @@ class Pixel{
     Color color;
 
     Pixel();
-    Color* rayTrace(const Vector3D *v,const Point *p,const int *step,Color *bgColor,const int self, vector<Object> *object);
+    Color rayTrace(Vector3D *v,Point *p,const int *step,Color *bgColor, vector<Object> *object);
 };

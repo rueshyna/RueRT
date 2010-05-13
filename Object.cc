@@ -1,20 +1,24 @@
 #include "RayTrace.h"
    
-double Object::rayIntersection(Vector3D *_ray, Point *p){
-   Vector3D ray = *_ray; 
-   
+double Object::rayIntersection(Vector3D *ray, Point *p){
    double t;
    double a(1);
-   double b(2*(ray.getX()*(center.getX()-(*p).getX())+ray.getY()*(center.getY()-(*p).getY())+ray.getZ()*(center.getZ()-(*p).getZ())));
-   double c(pow(center.getX()-(*p).getX(),2)+pow(center.getY()-(*p).getY(),2)+pow(center.getZ()-(*p).getZ(),2)-pow(r,2));
-   double d((pow(b,2)-4*a*c));
+   double b(2.0*(ray->getX()*(p->getX()-center.getX())
+              +ray->getY()*(p->getY()-center.getY())
+	      +ray->getZ()*(p->getZ()-center.getZ())));
+   double c(pow(p->getX()-center.getX(),2.0)+
+            pow(p->getY()-center.getY(),2.0)+
+	    pow(p->getZ()-center.getZ(),2.0)-
+	    pow(r,2.0));
+   double d((pow(b,2.0)-4.0*a*c));
 
    if(d < 0){
      t=NAN;
+    //cout << "I am here "<< a <<" " << b <<" "<<c<<" " <<endl;
      return t;
    }
    
-   double t0((-b-sqrt(d))/2);
+   double t0((-b-sqrt(d))/2.0);
 
    if(d = 0){
      t = t0; 
@@ -22,12 +26,12 @@ double Object::rayIntersection(Vector3D *_ray, Point *p){
    }
    
    if(t0 <= 0){
-     double t1((-b+sqrt(d))/2);
+     double t1((-b+sqrt(d))/2.0);
      
      if(t1 <= 0){
        return NAN;
      }else{
-       t = t1;
+       t = t0;
      }
    }else{
      t=t0;
@@ -36,7 +40,7 @@ double Object::rayIntersection(Vector3D *_ray, Point *p){
    return t;
  }
 
-Object::Object(Point *p, double rr, Color *c, int isl):r(rr), islight(isl){
+Object::Object(Point *p, double rr, Color *c, int isl):r(rr), isLight(isl){
   center = *p;
   color = *c;
 }

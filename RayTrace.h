@@ -63,7 +63,7 @@ class Color{
 class Object{
   public:
     double r;
-    int islight;
+    int isLight;
     Point center;
     Color color;
     
@@ -78,4 +78,7 @@ class Pixel{
 
     Pixel();
     Color rayTrace(Vector3D *v,Point *p,const int *step,Color *bgColor, vector<Object> *object);
+
+  private:
+    double max(double a, double b);
 };

@@ -9,7 +9,7 @@ using std::vector;
 int main(){
   int WEIGHT = 300;
   int HIGHT = 300;
-  Color bgColor(0.0,0.0,0.1);
+  Color bgColor(0.3,0.5,1);
   //init ray0 and init eye
   Vector3D r0(-1.0, -1.0, -1.0);
   Point eye(5.0,5.0,5.0);
@@ -21,8 +21,8 @@ int main(){
   vector<Object> objects;
   
   //light point
-  Point light_point(500, 500, 500);
-  Color light_color(1,1,1);
+  Point light_point(20, -10, 20);
+  Color light_color(0.6,0.6,0.6);
   Object light(&light_point, 1, &light_color,1);
   objects.push_back(light);
   
@@ -59,9 +59,17 @@ int main(){
    fprintf(fp, "%s\n", "P6");
    fprintf(fp, "%d %d\n", WEIGHT, HIGHT);
    fprintf(fp, "%d\n", 255);
-   char r, g, b;
+   double r, g, b;
+   
+   
    for (int j = 0; j < image.size(); ++j) {
-           fprintf(fp, "%c%c%c", (int)(image[j].color.getR()*255), ((int)image[j].color.getG()*255), (int)(image[j].color.getB()*255));
+
+   //r = (image[j].color.getR()>1)?1:image[j].color.getR();
+   //g = (image[j].color.getG()>1)?1:image[j].color.getG();
+   //b = (image[j].color.getB()>1)?1:image[j].color.getB();
+   
+   fprintf(fp, "%c%c%c", (int)(image[j].color.getR()*255), ((int)image[j].color.getG()*255), (int)(image[j].color.getB()*255));
+     //      fprintf(fp, "%c%c%c", (int)(r*255), (int)(g*255), (int)(b*255));
    }
    fclose(fp);
 }

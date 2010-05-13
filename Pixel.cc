@@ -36,9 +36,9 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
  // }else{
     //cout << "back " << bgColor->getR()<<endl; 
 
-  Vector3D nn(ray->getX()*t+p->getX()-(*objects)[intersectDot].center.getX(),
-              ray->getY()*t+p->getY()-(*objects)[intersectDot].center.getY(),
-	      ray->getZ()*t+p->getZ()-(*objects)[intersectDot].center.getZ());
+  Vector3D nn(ray->getX()-(*objects)[intersectDot].center.getX(),
+              ray->getX()-(*objects)[intersectDot].center.getY(),
+	      ray->getZ()-(*objects)[intersectDot].center.getZ());
   n=nn;
   n.normalize();
   
@@ -65,22 +65,22 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
   v.normalize();
   
   Color diffuse((*objects)[intersectDot].color.getR()
-                    *0.1+(*objects)[ilight].center.getX()*this->max(0,n.getX()*l.getX()),
+                    *0.1+(*objects)[ilight].center.getX()*this->max(0,n.getX()+l.getX()),
                 (*objects)[intersectDot].color.getG()
-		    *0.1+(*objects)[ilight].center.getY()*this->max(0,n.getY()*l.getY()),
+		    *0+(*objects)[ilight].center.getY()*this->max(0,n.getY()+l.getY()),
                 (*objects)[intersectDot].color.getB()
-		    *0.1+(*objects)[ilight].center.getZ()*this->max(0,n.getZ()*l.getZ()));
+		    *0+(*objects)[ilight].center.getZ()*this->max(0,n.getZ()+l.getZ()));
 
   Color phong((*objects)[ilight].center.getX()*
                 (*objects)[intersectDot].center.getX()*pow(this->max(0,v.getX()*r.getX()),2),
-              (*objects)[ilight].center.getY()*
+              (*objects)[ilight].center.getZ()*
 	        (*objects)[intersectDot].center.getY()*pow(this->max(0,v.getY()*r.getY()),2),
 	      (*objects)[ilight].center.getZ()*
 	        (*objects)[intersectDot].center.getZ()*pow(this->max(0,v.getZ()*r.getZ()),2));
 
-  Color lo(diffuse.getR(),
-           diffuse.getG(),
-           diffuse.getB());
+  Color lo(diffuse.getR()+phong.getR(),
+           diffuse.getG()+phong.getG(),
+           diffuse.getG()+phong.getB());
   return lo;
     }else{
     return *bgColor;

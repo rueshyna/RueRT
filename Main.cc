@@ -29,7 +29,7 @@ int main(){
   //circle
   Point circle_center(0,0,0);
   Color circle_color(1.0,0.0,0.0);
-  Object circle(&circle_center,5.0 , &circle_color,0);
+  Object circle(&circle_center,8.0 , &circle_color,0);
   objects.push_back(circle);
 
   //viewport

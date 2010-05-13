@@ -23,7 +23,7 @@ Point Matrix::computVector(int i, int j, int w_w, int h_w, int n_x, int n_y, dou
   double z(u*U.getZ()+v*V.getZ()+w*W.getZ()+point->getZ());
 
   //cout << U.getZ() << " " <<V.getZ()<<" "<<W.getZ()<<endl;
-  cout << i << " "<< j<< " "<<u <<" " << v<< " "<< w <<" "<< x << " "<< y<< " "<< z <<endl;
+ // cout << i << " "<< j<< " "<<u <<" " << v<< " "<< w <<" "<< x << " "<< y<< " "<< z <<endl;
 
   Point s(x, y, z);
   return s;

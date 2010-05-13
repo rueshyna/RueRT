@@ -31,44 +31,59 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
 //cout << t << endl;
   if(t > 0){
   //  cout << "hit" <<endl; 
-     local = (*objects)[intersectDot].color;
-     return local;
-  }else{
+  //   local = (*objects)[intersectDot].color;
+   //  return local;
+ // }else{
     //cout << "back " << bgColor->getR()<<endl; 
-    return *bgColor;
-  }
-/*
-  Vector3D nn(ray->getX()-(*objects)[intersectDot].center.getX(),
-              ray->getX()-(*objects)[intersectDot].center.getY(),
-	      ray->getZ()-(*objects)[intersectDot].center.getZ());
+
+  Vector3D nn(ray->getX()*t+p->getX()-(*objects)[intersectDot].center.getX(),
+              ray->getY()*t+p->getY()-(*objects)[intersectDot].center.getY(),
+	      ray->getZ()*t+p->getZ()-(*objects)[intersectDot].center.getZ());
   n=nn;
   n.normalize();
   
-  for(vector<Object>::iterator iter=objects->begin(); iter!=objects->end(); ++iter){
-   if(iter->isLight == 1){
-     Vector3D ll(iter->center.getX()-(*objects)[intersectDot].center.getX(),
-                iter->center.getY()-(*objects)[intersectDot].center.getY(),
-	        iter->center.getZ()-(*objects)[intersectDot].center.getZ());
+  
+  int ilight;
+
+  for(vector<Object>::size_type i = 0; i!=objects->size(); ++i){
+   if((*objects)[i].isLight == 1){
+     Vector3D ll((*objects)[i].center.getX()-ray->getX()*t+p->getX(),
+                 (*objects)[i].center.getY()-ray->getY()*t+p->getY(),
+	         (*objects)[i].center.getZ()-ray->getZ()*t+p->getZ());
      ll.normalize();
      l=ll;
+     ilight = i;
     }
   }
 
+  Vector3D r(-(l.getX())+2*(l.getX()+n.getX())*n.getX(),
+             -(l.getY())+2*(l.getY()+n.getY())*n.getY(),
+             -(l.getZ())+2*(l.getZ()+n.getZ())*n.getZ());
+  r.normalize();
 
-  double vDotr(0-ray->getX()+2*(ray->getX()*n.getX())*n.getX()+
-               0-ray->getY()+2*(ray->getY()*n.getY())*n.getY()+
-	       0-ray->getX()+2*(ray->getZ()*n.getZ())*n.getZ()); 
+  Vector3D v(0-ray->getX(),0-ray->getY(),0-ray->getZ());
+  v.normalize();
   
-  Color diffuse(0.8*(0.2+(*objects)[intersectDot].center.getX()*this->max(0,n.getX()+l.getX())),
-                0.8*(0.2+(*objects)[intersectDot].center.getY()*this->max(0,n.getX()+l.getY())),
-                0.8*(0.2+(*objects)[intersectDot].center.getZ()*this->max(0,n.getX()+l.getZ())));
-  Color phong(0.2*(*objects)[intersectDot].center.getX()*pow(this->max(0,vDotr),2),
-              0.2*(*objects)[intersectDot].center.getX()*pow(this->max(0,vDotr),2),
-	      0.2*(*objects)[intersectDot].center.getX()*pow(this->max(0,vDotr),2));
+  Color diffuse((*objects)[intersectDot].color.getR()
+                    *0.1+(*objects)[ilight].center.getX()*this->max(0,n.getX()*l.getX()),
+                (*objects)[intersectDot].color.getG()
+		    *0.1+(*objects)[ilight].center.getY()*this->max(0,n.getY()*l.getY()),
+                (*objects)[intersectDot].color.getB()
+		    *0.1+(*objects)[ilight].center.getZ()*this->max(0,n.getZ()*l.getZ()));
 
-  Color lo(diffuse.getR()+phong.getR(),
-              diffuse.getG()+phong.getG(),
-              diffuse.getG()+phong.getB());
-  return lo;*/
+  Color phong((*objects)[ilight].center.getX()*
+                (*objects)[intersectDot].center.getX()*pow(this->max(0,v.getX()*r.getX()),2),
+              (*objects)[ilight].center.getY()*
+	        (*objects)[intersectDot].center.getY()*pow(this->max(0,v.getY()*r.getY()),2),
+	      (*objects)[ilight].center.getZ()*
+	        (*objects)[intersectDot].center.getZ()*pow(this->max(0,v.getZ()*r.getZ()),2));
+
+  Color lo(diffuse.getR(),
+           diffuse.getG(),
+           diffuse.getB());
+  return lo;
+    }else{
+    return *bgColor;
+  }
 }
 

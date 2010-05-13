@@ -9,7 +9,7 @@ using std::vector;
 int main(){
   int WEIGHT = 300;
   int HIGHT = 300;
-  Color bgColor(0.2,0.2,0.2);
+  Color bgColor(0.0,0.0,0.1);
   //init ray0 and init eye
   Vector3D r0(-1.0, -1.0, -1.0);
   Point eye(5.0,5.0,5.0);
@@ -22,7 +22,7 @@ int main(){
   
   //light point
   Point light_point(500, 500, 500);
-  Color light_color(0,0,0);
+  Color light_color(1,1,1);
   Object light(&light_point, 1, &light_color,1);
   objects.push_back(light);
   

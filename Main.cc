@@ -30,13 +30,13 @@ int main(){
   objects.push_back(light);
 
   //light point
-  Point light_point2(40, -10, 20);
+  /*Point light_point2(40, -50, 20);
   Color light_color2(1.0,1.0,1.0);
   Object light2(&light_point2, 1, &light_color2,1);
-  objects.push_back(light2);
+  objects.push_back(light2);*/
   
   //circle1
-  Point circle_center(0,-3,0);
+  Point circle_center(10,-3,0);
   Color circle_color(0.9,0.3,0.2);
   Object circle(&circle_center,4.0 , &circle_color,0);
   objects.push_back(circle);
@@ -46,6 +46,12 @@ int main(){
   Color circle_color2(0.5,0.9,0.6);
   Object circle2(&circle_center2,100.0,&circle_color2,0);
   objects.push_back(circle2);
+
+  //circle3
+  Point circle_center3(-10,-150,-45);
+  Color circle_color3(0.5,0.6,0.9);
+  Object circle3(&circle_center3,100.0,&circle_color3,0);
+  objects.push_back(circle3);
 
   //viewport
   vector< Pixel > image;

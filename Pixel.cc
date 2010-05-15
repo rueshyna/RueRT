@@ -7,7 +7,7 @@ double Pixel::max(double a, double b){
 Pixel::Pixel(){}
 
 Color Pixel::rayTrace(Vector3D *ray,Point *p,
-                       const int *step,Color *bgColor,vector<Object> *objects){
+                       int *step,Color *bgColor,vector<Object> *objects){
   Color local, reflected, transmitted;
   Vector3D l;
   Vector3D n;
@@ -15,7 +15,7 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
   double minDist(10E10);
   int intersectDot = -1;
 
-  if(*step > 1){
+  if(*step > 2){
     return *bgColor;
   }
 
@@ -52,6 +52,7 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
     
     vector<Color> diffuse_v;
     vector<Color> specular_v;
+    vector<Color> refColor_v;
     vector<double> dark_v;
 
     for(vector<Vector3D>::size_type j=0; j!=l_vector.size(); ++j){
@@ -89,17 +90,27 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
       double rs(pow(max(0,r.dot(&v)),32));
       Color specular = Ip * Ks.multiplication(&rs);
       specular_v.push_back(specular);
+    
+      *step += 1;
+      
+      Color refColor = rayTrace(&r, &hitPoint,step, bgColor,objects);
+      refColor_v.push_back(refColor);
     }
     
     Color Ia(0.3,0.3,0.3);
     Color Ka(0.2,0.2,0.2);
     Color ambient=Ia * Ka;
     
+
     for(vector<Vector3D>::size_type i = 0; i !=l_vector.size(); ++i){
       local = local+(diffuse_v[i] + specular_v[i]).multiplication(&(dark_v[i]));
+      Color Kr(0.3*1/(i+1),0.3*1/(i+1),0.3*1/(i+1));
+      reflected = reflected+refColor_v[i]*Kr;
     }
     local = ambient +local;
-    return local;
+    
+
+    return local+reflected;
   }
 
  /* if(t > 0){

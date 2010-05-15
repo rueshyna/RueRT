@@ -15,8 +15,8 @@ class Vector3D{
     Vector3D operator+(Vector3D v);
     Vector3D operator-(Vector3D a);
     Vector3D multiplication(double *value);
-    Vector3D Cross(Vector3D *a);
-    double Dot(Vector3D *a);
+    Vector3D cross(Vector3D *a);
+    double dot(Vector3D *a);
     
     double getX();
     double getY();
@@ -86,7 +86,6 @@ class Object{
 
 class Pixel{
   public:
-    Vector3D ray;
     Color color;
 
     Pixel();

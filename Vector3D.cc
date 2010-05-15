@@ -26,14 +26,14 @@ Vector3D Vector3D::multiplication(double *value){
   return result;
 }
 
-Vector3D Vector3D::Cross(Vector3D *a){
+Vector3D Vector3D::cross(Vector3D *a){
   Vector3D result(this->getY()*a->getZ()-this->getZ()*a->getY(),
                 -(this->getX()*a->getZ()-this->getZ()*a->getX()),
 		  this->getX()*a->getY()-this->getY()*a->getX());
   return result;
 }
 
-double Vector3D::Dot(Vector3D *a){
+double Vector3D::dot(Vector3D *a){
   double result(this->X*a->getX()+this->Y*a->getY()+this->Z*a->getZ());
   return result;
 }

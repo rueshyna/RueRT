@@ -25,15 +25,27 @@ int main(){
   
   //light point
   Point light_point(20, -10, 20);
-  Color light_color(0.6,0.6,0.6);
+  Color light_color(1.0,1.0,1.0);
   Object light(&light_point, 1, &light_color,1);
   objects.push_back(light);
+
+  //light point
+  Point light_point2(40, -10, 20);
+  Color light_color2(1.0,1.0,1.0);
+  Object light2(&light_point2, 1, &light_color2,1);
+  objects.push_back(light2);
   
-  //circle
-  Point circle_center(0,0,0);
-  Color circle_color(1.0,0.0,0.0);
-  Object circle(&circle_center,8.0 , &circle_color,0);
+  //circle1
+  Point circle_center(0,-3,0);
+  Color circle_color(0.9,0.3,0.2);
+  Object circle(&circle_center,4.0 , &circle_color,0);
   objects.push_back(circle);
+
+  //circle2
+  Point circle_center2(-80,-15,-80);
+  Color circle_color2(0.5,0.9,0.6);
+  Object circle2(&circle_center2,100.0,&circle_color2,0);
+  objects.push_back(circle2);
 
   //viewport
   vector< Pixel > image;
@@ -46,8 +58,6 @@ int main(){
        * return eye to screen vector
        */
       Vector3D ray = matrix.computVector(i,j,500,500,WIDTH,HEIGHT,75.0);
-      ray.normalize();
-      pixel.ray = ray;
       
       int step(1);
       pixel.color=pixel.rayTrace(&ray, &eye, &step, &bgColor, &objects);

@@ -21,19 +21,20 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
 
   for(vector<Object>::size_type i = 0; i != objects->size(); ++i){
     t = (*objects)[i].rayIntersection(ray,p);
-    if(t < minDist && !(*objects)[i].isLight){
+    if(((t >= 0)&& (t < minDist) )&& (!(*objects)[i].isLight)){
       minDist = t;
       intersectDot=i;
     }
   }
   
-  if(t < 0){
+  if(minDist == 10E10){
     return *bgColor;
   }else{
+    vector<Vector3D> l_vector;
     Vector3D l;
     int light;
     
-    Vector3D hitRay = ray->multiplication(&t);
+    Vector3D hitRay = ray->multiplication(&minDist);
     Point hitPoint = p->addVector(&hitRay);
 
     for(vector<Object>::size_type i=0; i!=objects->size(); ++i){
@@ -41,33 +42,64 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
         Vector3D ll = (*objects)[i].center - hitPoint;
         l = ll;
 	l.normalize();
-	light = i;
+	l_vector.push_back(l);
+	//light = i;
       }
     }
-    
-    Vector3D n = hitPoint-(*objects)[intersectDot].center;
-    n.normalize();
-
-    Color Ia(0.5,0.3,0.1);
-    Color Ka(0.3,0.3,0.3);
-    Color ambient=Ia * Ka;
 
     Color Ip = (*objects)[intersectDot].color;
-    Color Kd(0.9,0.8,0.8);
-    double rd(this->max(0,(n.Dot(&l))));
-    Color diffuse = Ip*(Kd.multiplication(&rd));
+    Color Kd(0.8,0.8,0.8);
+    
+    vector<Color> diffuse_v;
+    vector<Color> specular_v;
+    vector<double> dark_v;
 
-    double twoNDotL(2*n.Dot(&l));
-    Vector3D r(n.multiplication(&twoNDotL) - l);
+    for(vector<Vector3D>::size_type j=0; j!=l_vector.size(); ++j){
+      Vector3D n = hitPoint-(*objects)[intersectDot].center;
+      n.normalize();
+    
+      //shadow
+      double s;
+      double dark = 1;
+     
+      for(vector<Object>::size_type i=0; i!=objects->size();++i){
+        s = (*objects)[i].rayIntersection(&(l_vector[j]),&hitPoint);
+        if(s>0 && !(*objects)[i].isLight && (i !=intersectDot)){
+          dark = 0.05;
+        }
+      }
+      
+      dark_v.push_back(dark);
+      
+      double rd(this->max(0,(n.dot(&(l_vector[j])))));
 
-    Vector3D zero(0,0,0);
-    Vector3D v = zero - (*ray);
+      Color diffuse = Ip*(Kd.multiplication(&rd));
+      diffuse_v.push_back(diffuse);
 
-    Color Ks(0.4,0.4,0.4);
-    double rs(pow(max(0,r.Dot(&v)),32));
-    Color specular = Ip * Ks.multiplication(&rs);
+      double twoNDotL(2*n.dot(&(l_vector[j])));
 
-    return ambient + diffuse + specular;
+      Vector3D r(n.multiplication(&twoNDotL) - l_vector[j]);
+      r.normalize();
+
+      Vector3D zero(0,0,0);
+      Vector3D v = zero - (*ray);
+      v.normalize();
+
+      Color Ks(0.4,0.4,0.4);
+      double rs(pow(max(0,r.dot(&v)),32));
+      Color specular = Ip * Ks.multiplication(&rs);
+      specular_v.push_back(specular);
+    }
+    
+    Color Ia(0.3,0.3,0.3);
+    Color Ka(0.2,0.2,0.2);
+    Color ambient=Ia * Ka;
+    
+    for(vector<Vector3D>::size_type i = 0; i !=l_vector.size(); ++i){
+      local = local+(diffuse_v[i] + specular_v[i]).multiplication(&(dark_v[i]));
+    }
+    local = ambient +local;
+    return local;
   }
 
  /* if(t > 0){

@@ -19,7 +19,7 @@ double Object::rayIntersection(Vector3D *ray, Point *p){
    
    double t0((-b-sqrt(d))/2.0);
 
-   if(d = 0){
+   if(d == 0){
      t = t0; 
      return t;
    }
@@ -35,7 +35,6 @@ double Object::rayIntersection(Vector3D *ray, Point *p){
    }else{
      t=t0;
    }
-   
    return t;
  }
 

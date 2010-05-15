@@ -4,12 +4,15 @@ void Matrix::setInitRay(Vector3D *vector){
   W = *vector;
   W.normalize();
   
-  Vector3D Utemp(W.getY()*1.0-W.getZ()*0.0, -(W.getX()*1.0-W.getZ()*0.0), W.getX()*0.0+W.getY()*0.0);
-  U=Utemp;
+  Vector3D viewUp(0,0,1);
+  //Vector3D Utemp(W.getY()*1.0-W.getZ()*0.0, -(W.getX()*1.0-W.getZ()*0.0), W.getX()*0.0+W.getY()*0.0);
+  // U=Utemp;
+  U=W.cross(&viewUp);
   U.normalize();
 
-  Vector3D Vtemp(U.getY()*W.getZ()-U.getZ()*W.getY(), -(U.getX()*W.getZ()-U.getZ()*W.getX()), U.getX()*W.getY()-U.getY()*W.getX());
-  V=Vtemp;
+  //Vector3D Vtemp(U.getY()*W.getZ()-U.getZ()*W.getY(), -(U.getX()*W.getZ()-U.getZ()*W.getX()), U.getX()*W.getY()-U.getY()*W.getX());
+  //V=Vtemp;
+  V=U.cross(&W);
   V.normalize();
 }
 
@@ -23,5 +26,6 @@ Vector3D Matrix::computVector(int i, int j, int w_w, int h_w, int n_x, int n_y, 
   double z(u*U.getZ()+v*V.getZ()+w*W.getZ());
 
   Vector3D s(x, y, z);
+  s.normalize();
   return s;
 }

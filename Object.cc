@@ -13,8 +13,7 @@ double Object::rayIntersection(Vector3D *ray, Point *p){
    double d((pow(b,2.0)-4.0*a*c));
 
    if(d < 0){
-     t=NAN;
-    //cout << "I am here "<< a <<" " << b <<" "<<c<<" " <<endl;
+     t=-1;
      return t;
    }
    
@@ -29,7 +28,7 @@ double Object::rayIntersection(Vector3D *ray, Point *p){
      double t1((-b+sqrt(d))/2.0);
      
      if(t1 <= 0){
-       return NAN;
+       t = -1;
      }else{
        t = t0;
      }
@@ -40,7 +39,7 @@ double Object::rayIntersection(Vector3D *ray, Point *p){
    return t;
  }
 
-Object::Object(Point *p, double rr, Color *c, int isl):r(rr), isLight(isl){
+Object::Object(Point *p, double rr, Color *c, int isL):r(rr), isLight(isL){
   center = *p;
   color = *c;
 }

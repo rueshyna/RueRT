@@ -13,18 +13,15 @@ void Matrix::setInitRay(Vector3D *vector){
   V.normalize();
 }
 
-Point Matrix::computVector(int i, int j, int w_w, int h_w, int n_x, int n_y, double distance, Point *point){
+Vector3D Matrix::computVector(int i, int j, int w_w, int h_w, int n_x, int n_y, double distance){
   double u(w_w*(i+0.5)/n_x-w_w/2);
   double v(h_w*(j+0.5)/n_y-h_w/2);
   double w(distance);
   
-  double x(u*U.getX()+v*V.getX()+w*W.getX()+point->getX());
-  double y(u*U.getY()+v*V.getY()+w*W.getY()+point->getY());
-  double z(u*U.getZ()+v*V.getZ()+w*W.getZ()+point->getZ());
+  double x(u*U.getX()+v*V.getX()+w*W.getX());
+  double y(u*U.getY()+v*V.getY()+w*W.getY());
+  double z(u*U.getZ()+v*V.getZ()+w*W.getZ());
 
-  //cout << U.getZ() << " " <<V.getZ()<<" "<<W.getZ()<<endl;
- // cout << i << " "<< j<< " "<<u <<" " << v<< " "<< w <<" "<< x << " "<< y<< " "<< z <<endl;
-
-  Point s(x, y, z);
+  Vector3D s(x, y, z);
   return s;
 }

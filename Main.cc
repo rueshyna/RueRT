@@ -2,18 +2,21 @@
 #include<iostream>
 #include<vector>
 #include <cstdio>
-using std::cout;
+#include <fstream>
+#include <string>
+
+using std::cout; 
 using std::endl;
 using std::vector;
-
+using std::string;
 int main(){
-  int WEIGHT = 300;
-  int HIGHT = 300;
+  int WIDTH = 300;
+  int HEIGHT = 300;
   Color bgColor(0.3,0.5,1);
   //init ray0 and init eye
   Vector3D r0(-1.0, -1.0, -1.0);
   Point eye(5.0,5.0,5.0);
-//  r0.normalize(); 
+
   //init matrix
   Matrix matrix;
   matrix.setInitRay(&r0);
@@ -35,44 +38,37 @@ int main(){
   //viewport
   vector< Pixel > image;
   
-  
-  for(int i=0; i!= WEIGHT; ++i){
-    for(int j=0; j!= HIGHT; ++j){
+  for(int i=0; i!= WIDTH; ++i){
+    for(int j=0; j!= HEIGHT; ++j){
       Pixel pixel;
 
-      //uv to xyz
-      Point screen = matrix.computVector(i,j,500,500,WEIGHT,HIGHT,75.0,&eye);
-      
-      //light ray
-      Vector3D ray(screen.getX()-eye.getX(),screen.getY()-eye.getY(),screen.getZ()-eye.getZ());
+      /* uv to xyz convert
+       * return eye to screen vector
+       */
+      Vector3D ray = matrix.computVector(i,j,500,500,WIDTH,HEIGHT,75.0);
       ray.normalize();
       pixel.ray = ray;
+      
       int step(1);
       pixel.color=pixel.rayTrace(&ray, &eye, &step, &bgColor, &objects);
-	 //cout << pixel.color.getR()<<" "<< pixel.color.getG()<<" " << pixel.color.getB()<<endl;
       image.push_back(pixel);
     }
   }
-  FILE *fp;
-  fp = fopen("./raytrace.ppm", "w");
-  if (fp != NULL) {
-   fprintf(fp, "%s\n", "P6");
-   fprintf(fp, "%d %d\n", WEIGHT, HIGHT);
-   fprintf(fp, "%d\n", 255);
-   double r, g, b;
-   
-   
-   for (int j = 0; j < image.size(); ++j) {
+  
+  std::ofstream outfile;
+  
+  outfile.open("raytrace.ppm",std::ofstream::out);
+  outfile <<"P3\n"<< WIDTH<<" "<< HEIGHT <<"\n"<< 255 <<"\n";
 
-   //r = (image[j].color.getR()>1)?1:image[j].color.getR();
-   //g = (image[j].color.getG()>1)?1:image[j].color.getG();
-   //b = (image[j].color.getB()>1)?1:image[j].color.getB();
+  double r, g, b;
    
-   fprintf(fp, "%c%c%c", (int)(image[j].color.getR()*255), ((int)image[j].color.getG()*255), (int)(image[j].color.getB()*255));
-     //      fprintf(fp, "%c%c%c", (int)(r*255), (int)(g*255), (int)(b*255));
-   }
-   fclose(fp);
-}
+  for (vector<Object>::size_type j = 0; j < image.size(); ++j) {
+    r = (image[j].color.getR()>1)?1:image[j].color.getR();
+    g = (image[j].color.getG()>1)?1:image[j].color.getG();
+    b = (image[j].color.getB()>1)?1:image[j].color.getB();
+    outfile << floor(r*255)<<" "<< floor(g*255) <<" "<< floor(b*255) << "\n";
+  }
+  outfile.close();
 
   return 0;
 };

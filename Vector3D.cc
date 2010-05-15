@@ -10,6 +10,34 @@ void Vector3D::normalize(){
   Y = Y/unit;
   Z = Z/unit;
 }
+
+Vector3D Vector3D::operator+(Vector3D a){
+  Vector3D result(this->X+a.getX(), this->Y+a.getY(), this->Z+a.getZ());
+  return result;
+}
+
+Vector3D Vector3D::operator-(Vector3D a){
+  Vector3D result(this->X-a.getX(), this->Y-a.getY(), this->Z-a.getZ());
+  return result;
+}
+
+Vector3D Vector3D::multiplication(double *value){
+  Vector3D result(this->X*(*value),this->Y*(*value), this->Z*(*value));
+  return result;
+}
+
+Vector3D Vector3D::Cross(Vector3D *a){
+  Vector3D result(this->getY()*a->getZ()-this->getZ()*a->getY(),
+                -(this->getX()*a->getZ()-this->getZ()*a->getX()),
+		  this->getX()*a->getY()-this->getY()*a->getX());
+  return result;
+}
+
+double Vector3D::Dot(Vector3D *a){
+  double result(this->X*a->getX()+this->Y*a->getY()+this->Z*a->getZ());
+  return result;
+}
+
 double Vector3D::getX(){return X;}
 double Vector3D::getY(){return Y;}
 double Vector3D::getZ(){return Z;}

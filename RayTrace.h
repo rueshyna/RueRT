@@ -89,7 +89,7 @@ class Pixel{
     Color color;
 
     Pixel();
-    Color rayTrace(Vector3D *v,Point *p, int *step,Color *bgColor, vector<Object> *object);
+    Color rayTrace(Vector3D *v,Point *p, int *step,Color *bgColor, vector<Object> *object,int iObject);
 
   private:
     double max(double a, double b);

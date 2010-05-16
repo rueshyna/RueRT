@@ -7,12 +7,12 @@ double Pixel::max(double a, double b){
 Pixel::Pixel(){}
 
 Color Pixel::rayTrace(Vector3D *ray,Point *p,
-                       int *step,Color *bgColor,vector<Object> *objects){
+                       int *step,Color *bgColor,vector<Object> *objects,int iObject){
   Color local, reflected, transmitted;
   Vector3D l;
   Vector3D n;
   double t;
-  double minDist(10E10);
+  double minDist(10E6);
   int intersectDot = -1;
 
   if(*step > 2){
@@ -21,13 +21,22 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
 
   for(vector<Object>::size_type i = 0; i != objects->size(); ++i){
     t = (*objects)[i].rayIntersection(ray,p);
-    if(((t >= 0)&& (t < minDist) )&& (!(*objects)[i].isLight)){
+    if((t > 0)&&(t < minDist)&&(!(*objects)[i].isLight)&& i != iObject){
       minDist = t;
       intersectDot=i;
     }
+  }/*
+Point hitPoints;
+  if(intersectDot != -1){
+    Vector3D hitRay = ray->multiplication(&minDist);
+    hitPoints = p->addVector(&hitRay);
   }
-  
-  if(minDist == 10E10){
+  else{
+    hitPoints(NAN,NAN,NAN);
+  }
+  cout << hitPoints.getX() << " " << hitPoints.getY()<<" " <<hitPoints.getX()<<endl; 
+*/
+  if(intersectDot == -1){
     return *bgColor;
   }else{
     vector<Vector3D> l_vector;
@@ -48,16 +57,17 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
     }
 
     Color Ip = (*objects)[intersectDot].color;
-    Color Kd(0.8,0.8,0.8);
+    Color Kd(0.5,0.5,0.5);
     
     vector<Color> diffuse_v;
     vector<Color> specular_v;
     vector<Color> refColor_v;
     vector<double> dark_v;
+    
+    Vector3D n = hitPoint-(*objects)[intersectDot].center;
+    n.normalize();
 
     for(vector<Vector3D>::size_type j=0; j!=l_vector.size(); ++j){
-      Vector3D n = hitPoint-(*objects)[intersectDot].center;
-      n.normalize();
     
       //shadow
       double s;
@@ -92,8 +102,8 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
       specular_v.push_back(specular);
     
       *step += 1;
-      
-      Color refColor = rayTrace(&r, &hitPoint,step, bgColor,objects);
+
+      Color refColor = rayTrace(&r, &hitPoint,step, bgColor,objects,intersectDot);
       refColor_v.push_back(refColor);
     }
     
@@ -108,64 +118,8 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
       reflected = reflected+refColor_v[i]*Kr;
     }
     local = ambient +local;
-    
 
     return local+reflected;
   }
-
- /* if(t > 0){
-    Vector3D nn(ray->getX()*t+p->getX()-(*objects)[intersectDot].center.getX(),
-                ray->getY()*t+p->getY()-(*objects)[intersectDot].center.getY(),
-	        ray->getZ()*t+p->getZ()-(*objects)[intersectDot].center.getZ());
-    n=nn;
-    n.normalize();
-  
-  
-    int ilight;
-
-    for(vector<Object>::size_type i = 0; i!=objects->size(); ++i){
-     if((*objects)[i].isLight == 1){
-       Vector3D ll((*objects)[i].center.getX()-ray->getX()*t+p->getX(),
-                   (*objects)[i].center.getY()-ray->getY()*t+p->getY(),
-                   (*objects)[i].center.getZ()-ray->getZ()*t+p->getZ());
-       ll.normalize();
-        l=ll;
-        ilight = i;
-      }
-    }
-    double nDotL(l.getX()*n.getX()+l.getY()*n.getY()+l.getZ()*n.getZ());
-
-    Vector3D r(-(l.getX())+2*(nDotL)*n.getX(),
-               -(l.getY())+2*(nDotL)*n.getY(),
-               -(l.getZ())+2*(nDotL)*n.getZ());
-    r.normalize();
-
-    Vector3D v(0-ray->getX(),0-ray->getY(),0-ray->getZ());
-    v.normalize();
-  
-    double diff_max(this->max(0,n.getX()*l.getX()+n.getY()*l.getY()+n.getZ()*l.getZ()));
-  
-    Color diffuse((*objects)[intersectDot].color.getR()
-                      *(0.9+(*objects)[ilight].color.getR()*diff_max),
-                  (*objects)[intersectDot].color.getG()
-		      *(0.2+(*objects)[ilight].color.getG()*diff_max),
-                  (*objects)[intersectDot].color.getB()
-                     *(0.2+(*objects)[ilight].color.getB()*diff_max));
-    
-    double phong_max(this->max(0,v.getX()*r.getX()+v.getY()*r.getY()+v.getZ()*r.getZ()));
-    Color phong((*objects)[ilight].color.getR()*
-                  (*objects)[intersectDot].color.getR()*pow(phong_max,128),
-                (*objects)[ilight].color.getG()*
-	          (*objects)[intersectDot].color.getG()*pow(phong_max,128),
-	        (*objects)[ilight].color.getB()*
-                  (*objects)[intersectDot].color.getB()*pow(phong_max,128));
-  
-    Color lo(diffuse.getR()+phong.getR(),
-             diffuse.getG()+phong.getG(),
-             diffuse.getB()+phong.getB());
-    return lo;
-  }else{
-    return *bgColor;
-  }*/
 }
 

@@ -36,15 +36,15 @@ int main(){
   objects.push_back(light2);*/
   
   //circle1
-  Point circle_center(10,-3,0);
+  Point circle_center(-50,0,0);
   Color circle_color(0.9,0.3,0.2);
   Object circle(&circle_center,4.0 , &circle_color,0);
   objects.push_back(circle);
 
   //circle2
-  Point circle_center2(-80,-15,-80);
+  Point circle_center2(10,-10,-20);
   Color circle_color2(0.5,0.9,0.6);
-  Object circle2(&circle_center2,100.0,&circle_color2,0);
+  Object circle2(&circle_center2,10.0,&circle_color2,0);
   objects.push_back(circle2);
 
   //circle3
@@ -63,10 +63,10 @@ int main(){
       /* uv to xyz convert
        * return eye to screen vector
        */
-      Vector3D ray = matrix.computVector(i,j,500,500,WIDTH,HEIGHT,75.0);
+      Vector3D ray = matrix.computVector(i,j,300,300,WIDTH,HEIGHT,75.0);
       
       int step(1);
-      pixel.color=pixel.rayTrace(&ray, &eye, &step, &bgColor, &objects);
+      pixel.color=pixel.rayTrace(&ray, &eye, &step, &bgColor, &objects, -1);
       image.push_back(pixel);
     }
   }
@@ -79,9 +79,9 @@ int main(){
   double r, g, b;
    
   for (vector<Object>::size_type j = 0; j < image.size(); ++j) {
-    r = (image[j].color.getR()>1)?1:image[j].color.getR();
-    g = (image[j].color.getG()>1)?1:image[j].color.getG();
-    b = (image[j].color.getB()>1)?1:image[j].color.getB();
+    r = image[j].color.getR();
+    g = image[j].color.getG();
+    b = image[j].color.getB();
     outfile << floor(r*255)<<" "<< floor(g*255) <<" "<< floor(b*255) << "\n";
   }
   outfile.close();

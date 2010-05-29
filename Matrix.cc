@@ -2,7 +2,7 @@
 
 void Matrix::setInitRay(Vector3D *vector){
   W = *vector;
-  W.normalize();
+  //W.normalize();
   
   Vector3D viewUp(0,0,1);
   U=W.cross(&viewUp);
@@ -12,16 +12,17 @@ void Matrix::setInitRay(Vector3D *vector){
   V.normalize();
 }
 
-Vector3D Matrix::computVector(int i, int j, int w_w, int h_w, int n_x, int n_y, double distance){
-  double u((i+0.5)*(w_w/n_x)-w_w/2);
-  double v((j+0.5)*(h_w/n_y)-h_w/2);
+Vector3D Matrix::computVector(double i, double j, double w_w, double h_w, double n_x, double n_y, double distance){
+  double u((i+0.5)*(w_w/n_x)-w_w/2.0);
+  double v((n_y-j-0.5)*(h_w/n_y)-h_w/2.0);
   double w(distance);
-  
-  double x(u*U.getX()+v*V.getX()+w*W.getX());
-  double y(u*U.getY()+v*V.getY()+w*W.getY());
-  double z(u*U.getZ()+v*V.getZ()+w*W.getZ());
-  
-  Vector3D s(x, y, z);
+  //if(i==0 && j == 0)
+  //cout<<"i j u v w" <<i<<" "<<j<<" "<< u<<" "<<v<<" "<<w<<endl;
+
+
+  Vector3D s = (W.multiplication(&w))+(U.multiplication(&u))+(V.multiplication(&v));
   s.normalize();
+  //if(i==0 && j == 0)
+  //cout <<"x y z" <<s.getX()<<" "<<s.getY()<<" "<<s.getZ()<<endl;
   return s;
 }

@@ -1,6 +1,7 @@
 #include <vector>
 #include <cmath>
 #include <iostream>
+#include <cstdlib>
 
 using std::cout;
 using std::endl;
@@ -48,7 +49,7 @@ class Point{
 class Matrix{
   public:
     void setInitRay(Vector3D *vector);
-    Vector3D computVector(int i, int j, int w_w, int h_w, int n_x, int n_y, double distance);
+    Vector3D computVector(double i, double j, double w_w, double h_w, double n_x, double n_y, double distance);
 
   private:
     Vector3D U;

@@ -29,7 +29,7 @@ Vector3D Vector3D::multiplication(double *value){
 Vector3D Vector3D::cross(Vector3D *a){
   Vector3D result(this->getY()*a->getZ()-this->getZ()*a->getY(),
                 -(this->getX()*a->getZ()-this->getZ()*a->getX()),
-		  this->getX()*a->getY()-this->getY()*a->getX());
+                  this->getX()*a->getY()-this->getY()*a->getX());
   return result;
 }
 

@@ -50,6 +50,7 @@ class Matrix{
   public:
     void setInitRay(Vector3D *vector);
     Vector3D computVector(double i, double j, double w_w, double h_w, double n_x, double n_y, double distance);
+    Vector3D computGrVector(double a);
 
   private:
     Vector3D U;

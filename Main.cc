@@ -10,8 +10,8 @@ using std::endl;
 using std::vector;
 using std::string;
 int main(){
-  int WIDTH = 1000;
-  int HEIGHT = 1000;
+  int WIDTH = 500;
+  int HEIGHT = 500;
   Color bgColor(0.3,0.5,1);
   //init ray0 and init eye
   Point r_c(0.0,0.0,0.0);
@@ -28,17 +28,22 @@ int main(){
 
   vector<Object> objects;
 
-  //light point
-  Point light_point(200, 100, 200);
-  Color light_color(1.0,1.0,1.0);
-  Object light(&light_point, 1, &light_color,1);
-  objects.push_back(light);
+  Vector3D lightAreaV(-1,0,0);
+  Matrix lightArea;
+  lightArea.setInitRay(&lightAreaV);
 
   //light point
-  /*Point light_point2(-400, 500, 200);
-  Color light_color2(1.0,1.0,1.0);
-  Object light2(&light_point2, 1, &light_color2,1);
-  objects.push_back(light2);*/
+  for(int i=0; i < 4; i++){
+    for(int j=0; j < 4; j++){
+      Vector3D l_point = lightArea.computVector(i,j,150,150,4,4,500);
+
+      cout<<l_point.getX() <<" " <<l_point.getY()<<" "<< l_point.getZ()<<endl;
+      Point light_point(l_point.getX()+100.0, l_point.getY()*100.0+500.0, l_point.getZ()*100.0+0.0);
+      Color light_color(1.0,1.0,1.0);
+      Object light(&light_point, 1, &light_color,1);
+      objects.push_back(light);
+    }
+  }
 
   //circle1
   Point circle_center(600,-200,-600);
@@ -47,7 +52,7 @@ int main(){
   objects.push_back(circle);
 
   //circle2
-  Point circle_center2(-100,-20,100);
+  Point circle_center2(0,-20,0);
   Color circle_color2(0.5,0.9,0.6);
   Object circle2(&circle_center2,50.0,&circle_color2,0);
   objects.push_back(circle2);
@@ -68,7 +73,7 @@ int main(){
       /* uv to xyz convert
        * return eye to screen vector
        */
-      Vector3D ray = matrix.computVector(i,j,WIDTH,HEIGHT,WIDTH,HEIGHT,distence);
+      Vector3D ray = matrix.computVector(i,j,1000,1000,WIDTH,HEIGHT,distence);
       int step(1);
       pixel.color=pixel.rayTrace(&ray, &eye, &step, &bgColor, &objects, -1);
       image.push_back(pixel);

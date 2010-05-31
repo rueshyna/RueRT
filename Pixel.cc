@@ -18,7 +18,6 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
   if(*step > 3){
     return *bgColor;
   }
-    //cout<<"\n" <<ray->getX()<<" "<<ray->getY()<<" "<<ray->getZ()<<endl;
 
   for(vector<Object>::size_type i = 0; i != objects->size(); ++i){
     t = (*objects)[i].rayIntersection(ray,p);
@@ -27,8 +26,7 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
       intersectDot=i;
     }
   }
-  //cout <<" "<< t<<endl;
-  //cout <<s.getX()<<" "<<s.getY()<<" "<<s.getZ()<<endl;
+
   if(intersectDot == -1){
     return *bgColor;
   }else{
@@ -67,7 +65,7 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
       for(vector<Object>::size_type i=0; i!=objects->size();++i){
         s = (*objects)[i].rayIntersection(&(l_vector[j]),&hitPoint);
         if(s>0 && !(*objects)[i].isLight && (i !=intersectDot)){
-          dark = 0.05;
+          dark = 0;
         }
       }
 
@@ -94,18 +92,22 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
 
       *step += 1;
 
-      Vector3D r_a(r.getX()+1.0/(rand()%50), r.getY()+1.0/(rand()%50),r.getZ());
+      //glossy reflaction matrix
+      Matrix gr_matrix;
+      gr_matrix.setInitRay(&r);
+      Vector3D r_a = gr_matrix.computGrVector(0.12);
+
       Color refColor = rayTrace(&r_a, &hitPoint,step, bgColor,objects,intersectDot);
       refColor_v.push_back(refColor);
     }
 
-    Color Ia(0.3,0.3,0.3);
-    Color Ka(0.2,0.2,0.2);
+    Color Ia(0.1,0.1,0.1);
+    Color Ka(0.1,0.1,0.1);
     Color ambient=Ia * Ka;
 
-
     for(vector<Vector3D>::size_type i = 0; i !=l_vector.size(); ++i){
-      local = local+(diffuse_v[i] + specular_v[i]).multiplication(&(dark_v[i]));
+      double c_dark(dark_v[i]/l_vector.size());
+      local = local+(diffuse_v[i] + specular_v[i]).multiplication(&(c_dark));
       Color Kr(0.2*1.0/(i+2.0),0.2*1.0/(i+2.0),0.2*1.0/(i+2.0));
       reflected = reflected+refColor_v[i]*Kr;
     }

@@ -37,30 +37,30 @@ int main(){
     for(int j=0; j < 4; j++){
       Vector3D l_point = lightArea.computVector(i,j,150,150,4,4,500);
 
-      cout<<l_point.getX() <<" " <<l_point.getY()<<" "<< l_point.getZ()<<endl;
+      //cout<<l_point.getX() <<" " <<l_point.getY()<<" "<< l_point.getZ()<<endl;
       Point light_point(l_point.getX()+100.0, l_point.getY()*100.0+500.0, l_point.getZ()*100.0+0.0);
       Color light_color(1.0,1.0,1.0);
-      Object light(&light_point, 1, &light_color,1);
+      Object light(&light_point, 1, &light_color,1,LIGHT);
       objects.push_back(light);
     }
   }
 
   //circle1
-  Point circle_center(600,-200,-600);
+  /*Point circle_center(600,-200,-600);
   Color circle_color(0.9,0.9,0.2);
-  Object circle(&circle_center,600.0 , &circle_color,0);
+  Object circle(&circle_center,600.0 , &circle_color,0,1);
   objects.push_back(circle);
 
   //circle2
   Point circle_center2(0,-20,0);
   Color circle_color2(0.5,0.9,0.6);
-  Object circle2(&circle_center2,50.0,&circle_color2,0);
-  objects.push_back(circle2);
+  Object circle2(&circle_center2,50.0,&circle_color2,0,1);
+  objects.push_back(circle2);*/
 
   //circle3
   Point circle_center3(100,-550,100);
   Color circle_color3(0.5,0.6,0.9);
-  Object circle3(&circle_center3,300.0,&circle_color3,0);
+  Object circle3(&circle_center3,300.0,&circle_color3,0,SINE);
   objects.push_back(circle3);
 
   //viewport

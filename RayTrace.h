@@ -7,18 +7,20 @@ using std::cout;
 using std::endl;
 using std::vector;
 
+enum MATERIAL_TYPE{LIGHT, WOOD, FIRE, CLOUD, MARBLE, SINE};
+
 class Vector3D{
   public:
     Vector3D();
     Vector3D(double x, double y, double z);
-    
+
     void normalize();
     Vector3D operator+(Vector3D v);
     Vector3D operator-(Vector3D a);
     Vector3D multiplication(double *value);
     Vector3D cross(Vector3D *a);
     double dot(Vector3D *a);
-    
+
     double getX();
     double getY();
     double getZ();
@@ -39,13 +41,13 @@ class Point{
     double getX();
     double getY();
     double getZ();
-    
+
   private:
     double X;
     double Y;
     double Z;
 };
-  
+
 class Matrix{
   public:
     void setInitRay(Vector3D *vector);
@@ -81,9 +83,13 @@ class Object{
     int isLight;
     Point center;
     Color color;
-    
+    MATERIAL_TYPE material;;
+    Object(Point *p, double rr, Color *c, int isL, MATERIAL_TYPE m);
+
     double rayIntersection(Vector3D *_ray, Point *p);
-    Object(Point *p, double rr, Color *c, int isL);
+    Color materialColor(Point *p);
+    Color wood_material(Point *p);
+    Color ssin(Point *p);
 };
 
 class Pixel{

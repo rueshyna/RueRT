@@ -46,7 +46,7 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
       }
     }
 
-    Color Ip = (*objects)[intersectDot].color;
+    Color Ip = (*objects)[intersectDot].ssin(&hitPoint);
     Color Kd(0.5,0.5,0.5);
 
     vector<Color> diffuse_v;

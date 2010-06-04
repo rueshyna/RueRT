@@ -5,7 +5,7 @@
 #include <fstream>
 #include <string>
 
-using std::cout; 
+using std::cout;
 using std::endl;
 using std::vector;
 using std::string;
@@ -13,6 +13,9 @@ int main(){
   int WIDTH = 500;
   int HEIGHT = 500;
   Color bgColor(0.3,0.5,1);
+  Noise noise;
+  noise.initHashTable();
+
   //init ray0 and init eye
   Point r_c(0.0,0.0,0.0);
   Point eye(0.0,1000.0,0.0);
@@ -33,14 +36,13 @@ int main(){
   lightArea.setInitRay(&lightAreaV);
 
   //light point
-  for(int i=0; i < 4; i++){
-    for(int j=0; j < 4; j++){
-      Vector3D l_point = lightArea.computVector(i,j,150,150,4,4,500);
+  for(int i=0; i < 2; i++){
+    for(int j=0; j < 2; j++){
+      Vector3D l_point = lightArea.computVector(i,j,150,150,2,2,500);
 
-      //cout<<l_point.getX() <<" " <<l_point.getY()<<" "<< l_point.getZ()<<endl;
       Point light_point(l_point.getX()+100.0, l_point.getY()*100.0+500.0, l_point.getZ()*100.0+0.0);
       Color light_color(1.0,1.0,1.0);
-      Object light(&light_point, 1, &light_color,1,LIGHT);
+      Object light(&light_point, 1, &light_color,1,LIGHT, &noise);
       objects.push_back(light);
     }
   }
@@ -60,7 +62,7 @@ int main(){
   //circle3
   Point circle_center3(100,-550,100);
   Color circle_color3(0.5,0.6,0.9);
-  Object circle3(&circle_center3,300.0,&circle_color3,0,SINE);
+  Object circle3(&circle_center3,300.0,&circle_color3,0,MARBLE, &noise);
   objects.push_back(circle3);
 
   //viewport

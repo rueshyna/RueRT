@@ -2,10 +2,12 @@
 #include <cmath>
 #include <iostream>
 #include <cstdlib>
+#include <algorithm>
 
 using std::cout;
 using std::endl;
 using std::vector;
+using std::random_shuffle;
 
 enum MATERIAL_TYPE{LIGHT, WOOD, FIRE, CLOUD, MARBLE, SINE};
 
@@ -77,19 +79,33 @@ class Color{
     double r,g,b;
 };
 
+class Noise{
+  public:
+    vector<int> table;
+    vector<Vector3D> table_v;
+    Noise();
+    void initHashTable();
+    Vector3D gamma(Point *p);
+    double omega(double t);
+    double b_omega(Point *uvw, Point *ijk);
+    double noise_funct(Point *p);
+};
+
 class Object{
   public:
     double r;
     int isLight;
     Point center;
     Color color;
-    MATERIAL_TYPE material;;
-    Object(Point *p, double rr, Color *c, int isL, MATERIAL_TYPE m);
+    MATERIAL_TYPE material;
+    Noise noise;
+    Object(Point *p, double rr, Color *c, int isL, MATERIAL_TYPE m, Noise *n);
 
     double rayIntersection(Vector3D *_ray, Point *p);
-    Color materialColor(Point *p);
     Color wood_material(Point *p);
     Color ssin(Point *p);
+    Color materialColor(Point *p);
+    Color marble_material(Point *p);
 };
 
 class Pixel{

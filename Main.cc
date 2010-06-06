@@ -7,7 +7,7 @@ int main(){
 
   //init ray0 and init eye
   Point r_c(0.0,0.0,0.0);
-  Point eye(0.0,1000.0,0.0);
+  Point eye(0.0,2000.0,0.0);
   Vector3D r0 = r_c-eye;
   double distence(sqrt(pow(r0.getX(),2)+pow(r0.getY(),2)+pow(r0.getZ(),2)));
   r0.normalize();
@@ -35,16 +35,15 @@ int main(){
       objects.push_back(light);
     }
   }
-
   //circle1
-  Point circle_center(600,-200,-600);
+  /*Point circle_center(600,-200,-600);
   Color circle_color(0.9,0.9,0.2);
   Object circle(&circle_center,600.0 , &circle_color,0, FIRE,&noise);
   objects.push_back(circle);
 
   //circle2
   Point circle_center2(10,-20,10);
-  Color circle_color2(0.7,0.5,0.2);
+  Color circle_color2(0.9,0.6,0.0);
   Object circle2(&circle_center2,100.0,&circle_color2,0, WOOD, &noise);
   objects.push_back(circle2);
 
@@ -54,6 +53,20 @@ int main(){
   Object circle3(&circle_center3,300.0,&circle_color3,0,CLOUD, &noise);
   objects.push_back(circle3);
 
+  //circle4
+  Point circle_center4(-300,-450,-300);
+  Color circle_color4(0.7,0.3,0.7);
+  Object circle4(&circle_center4,230.0,&circle_color4,0,MARBLE, &noise);
+  objects.push_back(circle4);*/
+
+  //circle5
+  IO io_read;
+  vector<Color> cImage=io_read.readPicture("earth.ppm");
+  Point circle_center5(-40,-45,40);
+  Color circle_color5(0.7,0.3,0.7);
+  Object circle5(&circle_center5,250.0,&circle_color5,0,GLOBE, &noise, &cImage);
+  objects.push_back(circle5);
+
   //viewport
   vector< Pixel > image;
 
@@ -61,9 +74,9 @@ int main(){
     for(int i=0; i!= WIDTH; ++i){
       Pixel pixel;
 
-      /* uv to xyz convert
-       * return eye to screen vector
-       */
+/*     uv to xyz convert
+ *      return eye to screen vector
+ */
       Vector3D ray = matrix.computVector(i,j,1000,1000,WIDTH,HEIGHT,distence);
       int step(1);
       pixel.color=pixel.rayTrace(&ray, &eye, &step, &bgColor, &objects, -1);
@@ -72,6 +85,5 @@ int main(){
   }
 
   IO::save("raytrace.ppm",&image);
-
   return 0;
 };

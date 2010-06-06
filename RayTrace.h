@@ -16,8 +16,10 @@ using std::endl;
 using std::vector;
 using std::random_shuffle;
 using std::string;
+using std::ifstream;
+using std::ofstream;
 
-enum MATERIAL_TYPE{LIGHT, WOOD, FIRE, CLOUD, MARBLE, SINE};
+enum MATERIAL_TYPE{LIGHT, WOOD, FIRE, CLOUD, MARBLE, SINE, CYLINDER, GLOBE};
 
 class Vector3D{
   public:
@@ -107,7 +109,9 @@ class Object{
     Color color;
     MATERIAL_TYPE material;
     Noise noise;
+    vector<Color> cImage;
     Object(Point *p, double rr, Color *c, int isL, MATERIAL_TYPE m, Noise *n);
+    Object(Point *p, double rr, Color *c, int isL, MATERIAL_TYPE m, Noise *n, vector<Color> *cIm);
 
     double rayIntersection(Vector3D *_ray, Point *p);
     Color wood_material(Point *p);
@@ -116,6 +120,8 @@ class Object{
     Color marble_material(Point *p);
     Color cloud_material(Point *p);
     Color fire_material(Point *p);
+    Color cylinder_material(Point *p);
+    Color globe_material(Point *p);
 };
 
 class Pixel{
@@ -132,4 +138,5 @@ class Pixel{
 class IO{
   public:
     static void save(string filename, vector<Pixel> *image);
+    vector<Color> readPicture(string filename);
 };

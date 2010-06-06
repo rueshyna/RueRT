@@ -35,6 +35,13 @@ double Object::rayIntersection(Vector3D *ray, Point *p){
    return t;
  }
 
+Object::Object(Point *p, double rr, Color *c, int isL, MATERIAL_TYPE m, Noise *n, vector<Color> *cIm):r(rr), isLight(isL), material(m){
+  center = *p;
+  color = *c;
+  noise = *n;
+  cImage = *cIm;
+}
+
 Object::Object(Point *p, double rr, Color *c, int isL, MATERIAL_TYPE m, Noise *n):r(rr), isLight(isL), material(m){
   center = *p;
   color = *c;
@@ -55,11 +62,44 @@ Color Object::materialColor(Point *p){
     return marble_material(p);
   case SINE:
     return ssin(p);
+  case CYLINDER :
+    return cylinder_material(p);
+  case GLOBE :
+    return globe_material(p);
   default :
     return color;
   }
 }
 
+#define PI 3.141592654
+Color Object::cylinder_material(Point *p){
+  double width(cImage[(cImage.size()-1)].getR());
+  double height(cImage[(cImage.size()-1)].getG());
+  double u,v,v_,u_;
+  u = atan((p->getY()-center.getY())/(p->getX()-center.getX()))*180.0/PI*2.0*(width-1)/360.0;
+  v = (p->getZ()-center.getZ())/(2.0*r)*(height-1);
+  u_= (int)(u-width/2);
+  v_= (int)(v+height/2);
+  return cImage[((int)(width*((height-v_-1))+u_))];
+}
+
+Color Object::globe_material(Point *p){
+  double width(cImage[(cImage.size()-1)].getR());
+  double height(cImage[(cImage.size()-1)].getG());
+  double u,v,v_,u_;
+  //v=arcos(z/r)/pi
+  v = acos((p->getZ()-center.getZ())/r)*180.0/PI;
+  if((p->getY()-center.getY())>=0){
+    u=acos((p->getX()-center.getX())/(r*sin(v*PI/180.0)))*180.0/PI;
+  }else{
+    u=acos((p->getX()-center.getX())/(r*sin(v*PI/180.0)))*180.0/PI;
+  }
+
+  u_= (int)((180.0-u)*(width-1.0)/180.0-width/2);
+  v_= (int)(v*(height-1.0)/360.0+height/2);
+
+  return cImage[((int)(width*((height-v_-1))+u_))];
+}
 Color Object::fire_material(Point *p){
   Point p1(p->getX()/7.0,p->getY()/5.0,p->getZ()/1.0);
   double n(noise.noise_funct(&p1)/0.5-1);
@@ -68,7 +108,6 @@ Color Object::fire_material(Point *p){
   Color c(0.9,0.2,0.1);
   return c.multiplication(&i);
 }
-#define PI 3.14159265
 
 Color Object::wood_material(Point *p){
   double i(0);

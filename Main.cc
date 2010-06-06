@@ -1,18 +1,7 @@
 #include "RayTrace.h"
-#include<iostream>
-#include<vector>
-#include <cstdio>
-#include <fstream>
-#include <string>
 
-using std::cout;
-using std::endl;
-using std::vector;
-using std::string;
 int main(){
-  int WIDTH = 500;
-  int HEIGHT = 500;
-  Color bgColor(0.3,0.5,1);
+  Color bgColor(0.2,0.2,0.2);
   Noise noise;
   noise.initHashTable();
 
@@ -48,21 +37,21 @@ int main(){
   }
 
   //circle1
-  /*Point circle_center(600,-200,-600);
+  Point circle_center(600,-200,-600);
   Color circle_color(0.9,0.9,0.2);
-  Object circle(&circle_center,600.0 , &circle_color,0,1);
+  Object circle(&circle_center,600.0 , &circle_color,0, FIRE,&noise);
   objects.push_back(circle);
 
   //circle2
-  Point circle_center2(0,-20,0);
-  Color circle_color2(0.5,0.9,0.6);
-  Object circle2(&circle_center2,50.0,&circle_color2,0,1);
-  objects.push_back(circle2);*/
+  Point circle_center2(10,-20,10);
+  Color circle_color2(0.7,0.5,0.2);
+  Object circle2(&circle_center2,100.0,&circle_color2,0, WOOD, &noise);
+  objects.push_back(circle2);
 
   //circle3
   Point circle_center3(100,-550,100);
-  Color circle_color3(0.5,0.6,0.9);
-  Object circle3(&circle_center3,300.0,&circle_color3,0,MARBLE, &noise);
+  Color circle_color3(0.5,0.62,0.78);
+  Object circle3(&circle_center3,300.0,&circle_color3,0,CLOUD, &noise);
   objects.push_back(circle3);
 
   //viewport
@@ -82,20 +71,7 @@ int main(){
     }
   }
 
-   std::ofstream outfile;
-
-  outfile.open("raytrace.ppm",std::ofstream::out);
-  outfile <<"P3\n"<< WIDTH<<" "<< HEIGHT <<"\n"<< 255 <<"\n";
-
-  double r, g, b;
-
-  for (vector<Object>::size_type j = 0; j < image.size(); ++j) {
-    r = image[j].color.getR();
-    g = image[j].color.getG();
-    b = image[j].color.getB();
-    outfile << floor(r*255)<<" "<< floor(g*255) <<" "<< floor(b*255) << "\n";
-  }
-  outfile.close();
+  IO::save("raytrace.ppm",&image);
 
   return 0;
 };

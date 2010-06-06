@@ -1,7 +1,5 @@
 #include "RayTrace.h"
 
-#define TABLE_NUM 256
-
 Noise::Noise(){}
 
 void Noise::initHashTable(){
@@ -11,8 +9,7 @@ void Noise::initHashTable(){
 
   random_shuffle(table.begin(),table.end());
 
-  while(table_v.size()<TABLE_NUM){
-    //normalize problem;
+  while(table_v.size()<=TABLE_NUM){
     Vector3D v(2.0*(rand()%1000/1000.0)-1,2.0*(rand()%1000/1000.0)-1,2.0*(rand()%1000/1000.0)-1);
     if((pow(v.getX(),2.0)+pow(v.getY(),2.0)+pow(v.getZ(),2.0)) < 1){
       v.normalize();
@@ -27,9 +24,10 @@ Vector3D Noise::gamma(Point *p){
 
 double Noise::omega(double t){
   if(t<1 && t>-1){
-    return (t>0)?2.0*pow(t,3.0)-3.0*pow(t,2.0)+1.0:2.0*pow(0.0-t,3.0)-3.0*pow(t,2.0)+1.0;
+    double tt((t>0)?t:0.0-t);
+    return 2.0*pow(tt,3.0)-3.0*pow(tt,2.0)+1.0;
   }else{
-    return 0;
+    return 0.0;
   }
 }
 
@@ -49,5 +47,5 @@ double Noise::noise_funct(Point *p){
       }
     }
   }
-  return (result+1.0)*0.7;
+  return (result+1.0)*0.5;
 }

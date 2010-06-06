@@ -1,5 +1,4 @@
 #include "RayTrace.h"
-#include <fstream>
 double Object::rayIntersection(Vector3D *ray, Point *p){
    Vector3D p_a((*p)-center);
    double t(-2);
@@ -49,9 +48,9 @@ Color Object::materialColor(Point *p){
   case WOOD :
     return wood_material(p);
   case FIRE :
-    break;
+    return fire_material(p);
   case CLOUD :
-    break;
+    return cloud_material(p);
   case MARBLE :
     return marble_material(p);
   case SINE:
@@ -61,10 +60,21 @@ Color Object::materialColor(Point *p){
   }
 }
 
+Color Object::fire_material(Point *p){
+  Point p1(p->getX()/7.0,p->getY()/5.0,p->getZ()/1.0);
+  double n(noise.noise_funct(&p1)/0.5-1);
+  double i(n+0.9);
+  i = (i>0)?i:0.0-i;
+  Color c(0.9,0.2,0.1);
+  return c.multiplication(&i);
+}
 #define PI 3.14159265
 
 Color Object::wood_material(Point *p){
-  double radius(sqrt(pow(p->getX(),2.0)+pow(p->getZ(),2.0)));
+  double i(0);
+  Point p2(p->getX()/120.0,p->getY()/120.0,p->getZ()/120.0);
+  i=noise.noise_funct(&p2)*50.0-(int)(noise.noise_funct(&p2)*50.0);
+  /*double radius(sqrt(pow(p->getX(),2.0)+pow(p->getZ(),2.0)));
   double angel(0.0);
   double grain(0.0);
 
@@ -81,9 +91,15 @@ Color Object::wood_material(Point *p){
   if(grain < 40){
     return color;
   }else{
-    Color c(0.1,0.2,0.1);
-    return c;
-  }
+    Color c(0.1,0.2,0.1);*/
+  return color.multiplication(&i);
+  //}
+}
+
+Color Object::cloud_material(Point *p){
+  Point p1(p->getX()/30.0+20.6,p->getY()/20.0+50.5,p->getZ()/30.0+70.0);
+  double i(noise.noise_funct(&p1)*2.0);
+  return color.multiplication(&i);
 }
 
 Color Object::marble_material(Point *p){
@@ -108,11 +124,7 @@ Color Object::marble_material(Point *p){
       i=0.2+0.2*noise.noise_funct(&p3);
     }
   }
-
-  //double i(0);
-  //i=noise.noise_funct(p)*20.0-(int)(noise.noise_funct(p)*20.0);
-  Color c(color.getR()*i,color.getG()*i,color.getB()*i);
-  return c;
+  return color.multiplication(&i);
 }
 
 Color Object::ssin(Point *p){

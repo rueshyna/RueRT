@@ -3,11 +3,19 @@
 #include <iostream>
 #include <cstdlib>
 #include <algorithm>
+#include <cstdio>
+#include <fstream>
+#include <string>
+
+#define WIDTH 500
+#define HEIGHT 500
+#define TABLE_NUM 256
 
 using std::cout;
 using std::endl;
 using std::vector;
 using std::random_shuffle;
+using std::string;
 
 enum MATERIAL_TYPE{LIGHT, WOOD, FIRE, CLOUD, MARBLE, SINE};
 
@@ -106,6 +114,8 @@ class Object{
     Color ssin(Point *p);
     Color materialColor(Point *p);
     Color marble_material(Point *p);
+    Color cloud_material(Point *p);
+    Color fire_material(Point *p);
 };
 
 class Pixel{
@@ -117,4 +127,9 @@ class Pixel{
 
   private:
     double max(double a, double b);
+};
+
+class IO{
+  public:
+    static void save(string filename, vector<Pixel> *image);
 };

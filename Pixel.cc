@@ -16,7 +16,8 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
   int intersectDot = -1;
 
   if(*step > 3){
-    return *bgColor;
+    Color c_last(0,0,0);
+    return c_last;
   }
 
   for(vector<Object>::size_type i = 0; i != objects->size(); ++i){

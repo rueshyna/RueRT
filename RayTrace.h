@@ -19,7 +19,7 @@ using std::string;
 using std::ifstream;
 using std::ofstream;
 
-enum MATERIAL_TYPE{LIGHT, WOOD, FIRE, CLOUD, MARBLE, SINE, CYLINDER, GLOBE};
+enum MATERIAL_TYPE{LIGHT, WOOD, FIRE, CLOUD, MARBLE, SINE, CYLINDER, GLOBE, PLANAR};
 
 class Vector3D{
   public:
@@ -122,6 +122,7 @@ class Object{
     Color fire_material(Point *p);
     Color cylinder_material(Point *p);
     Color globe_material(Point *p);
+    Color planar_material(Point *p);
 };
 
 class Pixel{

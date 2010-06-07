@@ -66,12 +66,27 @@ Color Object::materialColor(Point *p){
     return cylinder_material(p);
   case GLOBE :
     return globe_material(p);
+  case PLANAR :
+    return planar_material(p);
   default :
     return color;
   }
 }
 
 #define PI 3.141592654
+Color Object::planar_material(Point *p){
+  double width(cImage[(cImage.size()-1)].getR());
+  double height(cImage[(cImage.size()-1)].getG());
+  double u,v,v_,u_;
+  u= (p->getX()-center.getY());
+  v= (p->getZ()-center.getZ());
+
+  u_=(int)(u*(width-1)/(width/height*2*r)-width/2);
+  v_=(int)(v*(height-1)/(2*r)+height/2);
+
+  return cImage[((int)(width*((height-v_-1))+u_))];
+}
+
 Color Object::cylinder_material(Point *p){
   double width(cImage[(cImage.size()-1)].getR());
   double height(cImage[(cImage.size()-1)].getG());
@@ -87,7 +102,7 @@ Color Object::globe_material(Point *p){
   double width(cImage[(cImage.size()-1)].getR());
   double height(cImage[(cImage.size()-1)].getG());
   double u,v,v_,u_;
-  //v=arcos(z/r)/pi
+
   if((p->getY()-center.getY())>=0){
     u=atan((p->getY()-center.getY())/(p->getX()-center.getX()))*180.0/PI*2.0;
   }else{

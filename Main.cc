@@ -1,13 +1,13 @@
 #include "RayTrace.h"
 
 int main(){
-  Color bgColor(0.2,0.2,0.2);
+  Color bgColor(0.8,0.7,0.6);
   Noise noise;
   noise.initHashTable();
 
   //init ray0 and init eye
   Point r_c(0.0,0.0,0.0);
-  Point eye(0.0,2000.0,0.0);
+  Point eye(0.0,1000.0,0.0);
   Vector3D r0 = r_c-eye;
   double distence(sqrt(pow(r0.getX(),2)+pow(r0.getY(),2)+pow(r0.getZ(),2)));
   r0.normalize();
@@ -25,7 +25,7 @@ int main(){
   lightArea.setInitRay(&lightAreaV);
 
   //light point
-  for(int i=0; i < 2; i++){
+  /*for(int i=0; i < 2; i++){
     for(int j=0; j < 2; j++){
       Vector3D l_point = lightArea.computVector(i,j,150,150,2,2,500);
 
@@ -34,7 +34,11 @@ int main(){
       Object light(&light_point, 1, &light_color,1,LIGHT, &noise);
       objects.push_back(light);
     }
-  }
+  }*/
+      Point d1light_point(0,800, 0);
+      Color d1light_color(1.0,1.0,1.0);
+      Object d1light(&d1light_point, 1, &d1light_color,1,LIGHT, &noise);
+      objects.push_back(d1light);
   //circle1
   /*Point circle_center(600,-200,-600);
   Color circle_color(0.9,0.9,0.2);
@@ -62,7 +66,7 @@ int main(){
   //circle5
   IO io_read;
   vector<Color> cImage=io_read.readPicture("earth.ppm");
-  Point circle_center5(-40,-45,40);
+  Point circle_center5(0,0,0);
   Color circle_color5(0.7,0.3,0.7);
   Object circle5(&circle_center5,250.0,&circle_color5,0,GLOBE, &noise, &cImage);
   objects.push_back(circle5);

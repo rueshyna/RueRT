@@ -88,15 +88,16 @@ Color Object::globe_material(Point *p){
   double height(cImage[(cImage.size()-1)].getG());
   double u,v,v_,u_;
   //v=arcos(z/r)/pi
-  v = acos((p->getZ()-center.getZ())/r)*180.0/PI;
   if((p->getY()-center.getY())>=0){
-    u=acos((p->getX()-center.getX())/(r*sin(v*PI/180.0)))*180.0/PI;
+    u=atan((p->getY()-center.getY())/(p->getX()-center.getX()))*180.0/PI*2.0;
   }else{
-    u=acos((p->getX()-center.getX())/(r*sin(v*PI/180.0)))*180.0/PI;
+    u=atan(PI+(p->getY()-center.getY())/(p->getX()-center.getX()))*180.0/PI*2.0;
   }
 
-  u_= (int)((180.0-u)*(width-1.0)/180.0-width/2);
-  v_= (int)(v*(height-1.0)/360.0+height/2);
+  v = acos((p->getZ()-center.getZ())/r)*180.0/PI;
+
+  u_= (int)(u/360.0*(width-1.0)-width/2);
+  v_= (int)((90-v)/180.0*(height-1.0)+height/2);
 
   return cImage[((int)(width*((height-v_-1))+u_))];
 }

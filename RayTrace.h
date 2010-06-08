@@ -7,8 +7,8 @@
 #include <fstream>
 #include <string>
 
-#define WIDTH 800
-#define HEIGHT 800
+#define WIDTH 400
+#define HEIGHT 400
 #define TABLE_NUM 256
 
 using std::cout;
@@ -130,7 +130,7 @@ class Pixel{
     Color color;
 
     Pixel();
-    Color rayTrace(Vector3D *v,Point *p, int *step,Color *bgColor, vector<Object> *object,int iObject);
+    Color rayTrace(Vector3D *v,Point *p, int step,Color *bgColor, vector<Object> *object,int iObject);
 
   private:
     double max(double a, double b);

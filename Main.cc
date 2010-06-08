@@ -13,14 +13,12 @@ int main(){
   r0.normalize();
 
   vector<Point> f_eye;
-  Point f_eye1(-0.025,1000.0,-0.001);
-  f_eye.push_back(f_eye1);
-  Point f_eye2(-0.01,1000.0,0.002);
-  f_eye.push_back(f_eye2);
-  //Point f_eye3(0.025,1000.0,-0.025);
-  //f_eye.push_back(f_eye3);
-  Point f_eye4(-0.035,1000.0,0.001);
-  f_eye.push_back(f_eye4);
+  //Point f_eye1(-0.025,1000.0,-0.001);
+  //f_eye.push_back(f_eye1);
+  //Point f_eye2(-0.01,1000.0,0.002);
+  //f_eye.push_back(f_eye2);
+  //Point f_eye4(-0.035,1000.0,0.001);
+  //f_eye.push_back(f_eye4);
   f_eye.push_back(eye);
 
   srand(time(NULL));
@@ -36,12 +34,12 @@ int main(){
   lightArea.setInitRay(&lightAreaV);
 
   //focus plan
-  Point p_focus(0,-800,0);
+  Point p_focus(0,-400,0);
   Color c_focus(0.7,0.3,0.7);
   Object focus_plan(&p_focus,300.0,&c_focus,0,LIGHT, &noise);
 
   //light point
-  for(int i=0; i < 3; i++){
+  /*for(int i=0; i < 3; i++){
     for(int j=0; j < 3; j++){
       Vector3D l_point = lightArea.computVector(i,j,150,150,2,2,500);
 
@@ -50,7 +48,12 @@ int main(){
       Object light(&light_point, 1, &light_color,1,LIGHT, &noise);
       objects.push_back(light);
     }
-  }
+  }*/
+
+  Point light_point1(-600.0, 500.0, 100.0);
+  Color light_color1(1.0,1.0,1.0);
+  Object light1(&light_point1, 1, &light_color1,1,LIGHT, &noise);
+  objects.push_back(light1);
 
   //circle1
   IO io_read1;
@@ -62,49 +65,49 @@ int main(){
 
 
   //circle2
-  Point circle_center2(50,-20,-50);
+  Point circle_center2(150,-20,0);
   Color circle_color2(0.9,0.6,0.0);
-  Object circle2(&circle_center2,100.0,&circle_color2,0, WOOD, &noise);
+  Object circle2(&circle_center2,50.0,&circle_color2,0, WOOD, &noise);
   objects.push_back(circle2);
 
   //circle3
-  Point circle_center3(400,-550,400);
+  Point circle_center3(400,-350,400);
   Color circle_color3(0.5,0.62,0.78);
-  Object circle3(&circle_center3,100.0,&circle_color3,0,CLOUD, &noise);
+  Object circle3(&circle_center3,250.0,&circle_color3,0,CLOUD, &noise);
   objects.push_back(circle3);
 
   //circle4
-  Point circle_center4(-700,-800,200);
+  Point circle_center4(-700,-800,500);
   Color circle_color4(0.7,0.3,0.7);
-  Object circle4(&circle_center4,250.0,&circle_color4,0,MARBLE, &noise);
+  Object circle4(&circle_center4,350.0,&circle_color4,0,MARBLE, &noise);
   objects.push_back(circle4);
 
   //circle5
   IO io_read;
   vector<Color> cImage=io_read.readPicture("earth.ppm");
-  Point circle_center5(0,-800,0);
+  Point circle_center5(0,-400,0);
   Color circle_color5(0.7,0.3,0.7);
   Object circle5(&circle_center5,300.0,&circle_color5,0,GLOBE, &noise, &cImage);
   objects.push_back(circle5);
 
   //circle6
-  Point circle_center6(-500,-500,-500);
+  Point circle_center6(-500,-700,-500);
   Color circle_color6(0.7,0.9,0.7);
   Object circle6(&circle_center6,350.0,&circle_color6,0,SINE, &noise);
   objects.push_back(circle6);
 
   //circle7
-  Point circle_center7(-400,-500,400);
+  Point circle_center7(-100,-200,400);
   Color circle_color7(0.7,0.9,0.7);
-  Object circle7(&circle_center7,250.0,&circle_color7,0,FIRE, &noise);
+  Object circle7(&circle_center7,150.0,&circle_color7,0,FIRE, &noise);
   objects.push_back(circle7);
 
   //circle8
   IO io_read2;
   vector<Color> cImage2=io_read2.readPicture("background.ppm");
-  Point circle_center8(400,-900,500);
+  Point circle_center8(-400,-15000,-900);
   Color circle_color8(0.7,0.9,0.7);
-  Object circle8(&circle_center8,340.0,&circle_color8,0,PLANAR, &noise, &cImage2);
+  Object circle8(&circle_center8,10000.0,&circle_color8,0,PLANAR, &noise, &cImage2);
   objects.push_back(circle8);
   //viewport
   vector< Pixel > image;
@@ -132,15 +135,15 @@ int main(){
                       &f_eye[f_eye.size()-1]) == -1)? 0:1;
       if(hasInsect){
         totalC= totalC+pixel.rayTrace(&focus_v[focus_v.size()-1],
-                                      &f_eye[f_eye.size()-1], &step, &bgColor, &objects, -1);
-        ++count;
+                                      &f_eye[f_eye.size()-1], step, &bgColor, &objects, -1);
+       count += 1;
       }else{
         for(int i=0 ; i!=focus_v.size(); ++i){
           int otherInsect = (focus_plan.rayIntersection(
                                     &focus_v[i], &f_eye[i]) == -1)? 0:1;
           if(!otherInsect){
-            totalC= totalC+pixel.rayTrace(&focus_v[i], &f_eye[i], &step, &bgColor, &objects,-1);
-            ++count;
+            totalC= totalC+pixel.rayTrace(&focus_v[i], &f_eye[i], step, &bgColor, &objects,-1);
+            count+=1;
           }
         }
       }

@@ -78,7 +78,7 @@ Color Object::planar_material(Point *p){
   double width(cImage[(cImage.size()-1)].getR());
   double height(cImage[(cImage.size()-1)].getG());
   double u,v,v_,u_;
-  u= (p->getX()-center.getY());
+  u= (p->getX()-center.getX());
   v= (p->getZ()-center.getZ());
 
   u_=(int)(u*(width-1)/(width/height*2*r)-width/2);

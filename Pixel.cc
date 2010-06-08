@@ -94,11 +94,11 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
       *step += 1;
 
       //glossy reflaction matrix
-      //Matrix gr_matrix;
-      //gr_matrix.setInitRay(&r);
-      //Vector3D r_a = gr_matrix.computGrVector(0.12);
+      Matrix gr_matrix;
+      gr_matrix.setInitRay(&r);
+      Vector3D r_a = gr_matrix.computGrVector(0.12);
 
-      Color refColor = rayTrace(&r, &hitPoint,step, bgColor,objects,intersectDot);
+      Color refColor = rayTrace(&r_a, &hitPoint,step, bgColor,objects,intersectDot);
       refColor_v.push_back(refColor);
     }
 

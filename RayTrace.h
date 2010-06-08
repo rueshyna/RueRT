@@ -7,8 +7,8 @@
 #include <fstream>
 #include <string>
 
-#define WIDTH 500
-#define HEIGHT 500
+#define WIDTH 800
+#define HEIGHT 800
 #define TABLE_NUM 256
 
 using std::cout;

@@ -13,12 +13,12 @@ int main(){
   r0.normalize();
 
   vector<Point> f_eye;
-  //Point f_eye1(-0.025,1000.0,-0.001);
-  //f_eye.push_back(f_eye1);
-  //Point f_eye2(-0.01,1000.0,0.002);
-  //f_eye.push_back(f_eye2);
-  //Point f_eye4(-0.035,1000.0,0.001);
-  //f_eye.push_back(f_eye4);
+  Point f_eye1(-0.025,1000.0,-0.001);
+  f_eye.push_back(f_eye1);
+  Point f_eye2(-0.01,1000.0,0.002);
+  f_eye.push_back(f_eye2);
+  Point f_eye4(-0.035,1000.0,0.001);
+  f_eye.push_back(f_eye4);
   f_eye.push_back(eye);
 
   srand(time(NULL));
@@ -34,70 +34,73 @@ int main(){
   lightArea.setInitRay(&lightAreaV);
 
   //focus plan
-  Point p_focus(0,-400,0);
+  Point p_focus(-200,-300,170);
   Color c_focus(0.7,0.3,0.7);
-  Object focus_plan(&p_focus,300.0,&c_focus,0,LIGHT, &noise);
+  Object focus_plan(&p_focus,150.0,&c_focus,0,LIGHT, &noise);
 
   //light point
-  /*for(int i=0; i < 3; i++){
-    for(int j=0; j < 3; j++){
+  for(int i=0; i < 2; i++){
+    for(int j=0; j < 2; j++){
       Vector3D l_point = lightArea.computVector(i,j,150,150,2,2,500);
 
-      Point light_point(l_point.getX()+100.0, l_point.getY()*100.0+500.0, l_point.getZ()*100.0+0.0);
+      Point light_point(l_point.getX()+0.0, l_point.getY()*50.0-400.0, l_point.getZ()*100.0+400.0);
       Color light_color(1.0,1.0,1.0);
       Object light(&light_point, 1, &light_color,1,LIGHT, &noise);
       objects.push_back(light);
     }
-  }*/
+  }
 
-  Point light_point1(-600.0, 500.0, 100.0);
+  Point light_point1(0, 400, 100);
   Color light_color1(1.0,1.0,1.0);
   Object light1(&light_point1, 1, &light_color1,1,LIGHT, &noise);
   objects.push_back(light1);
 
+  Point light_point2(100, 400, 100);
+  Color light_color2(1.0,1.0,1.0);
+  Object light2(&light_point2, 1, &light_color2,1,LIGHT, &noise);
+  objects.push_back(light2);
+
   //circle1
   IO io_read1;
   vector<Color> cImage1=io_read1.readPicture("sun.ppm");
-  Point circle_center(600,-200,-600);
+  Point circle_center(0,-100,-1000);
   Color circle_color(0.9,0.9,0.2);
-  Object circle(&circle_center,600.0 , &circle_color,0, CYLINDER,&noise, &cImage1);
+  Object circle(&circle_center,800.0 , &circle_color,0, CYLINDER,&noise, &cImage1);
   objects.push_back(circle);
-
-
   //circle2
-  Point circle_center2(150,-20,0);
+  Point circle_center2(800,-1800,790);
   Color circle_color2(0.9,0.6,0.0);
-  Object circle2(&circle_center2,50.0,&circle_color2,0, WOOD, &noise);
+  Object circle2(&circle_center2,150.0,&circle_color2,0, WOOD, &noise);
   objects.push_back(circle2);
 
   //circle3
-  Point circle_center3(400,-350,400);
+  Point circle_center3(600,-1500,570);
   Color circle_color3(0.5,0.62,0.78);
-  Object circle3(&circle_center3,250.0,&circle_color3,0,CLOUD, &noise);
+  Object circle3(&circle_center3,150.0,&circle_color3,0,CLOUD, &noise);
   objects.push_back(circle3);
 
   //circle4
-  Point circle_center4(-700,-800,500);
+  Point circle_center4(400,-1200,360);
   Color circle_color4(0.7,0.3,0.7);
-  Object circle4(&circle_center4,350.0,&circle_color4,0,MARBLE, &noise);
+  Object circle4(&circle_center4,150.0,&circle_color4,0,MARBLE, &noise);
   objects.push_back(circle4);
 
   //circle5
   IO io_read;
   vector<Color> cImage=io_read.readPicture("earth.ppm");
-  Point circle_center5(0,-400,0);
+  Point circle_center5(-200,-300,170);
   Color circle_color5(0.7,0.3,0.7);
-  Object circle5(&circle_center5,300.0,&circle_color5,0,GLOBE, &noise, &cImage);
+  Object circle5(&circle_center5,150.0,&circle_color5,0,GLOBE, &noise, &cImage);
   objects.push_back(circle5);
 
   //circle6
-  Point circle_center6(-500,-700,-500);
+  Point circle_center6(0,-600,0);
   Color circle_color6(0.7,0.9,0.7);
-  Object circle6(&circle_center6,350.0,&circle_color6,0,SINE, &noise);
+  Object circle6(&circle_center6,150.0,&circle_color6,0,SINE, &noise);
   objects.push_back(circle6);
 
   //circle7
-  Point circle_center7(-100,-200,400);
+  Point circle_center7(200,-900,150);
   Color circle_color7(0.7,0.9,0.7);
   Object circle7(&circle_center7,150.0,&circle_color7,0,FIRE, &noise);
   objects.push_back(circle7);
@@ -105,10 +108,11 @@ int main(){
   //circle8
   IO io_read2;
   vector<Color> cImage2=io_read2.readPicture("background.ppm");
-  Point circle_center8(-400,-15000,-900);
+  Point circle_center8(-400,0,400);
   Color circle_color8(0.7,0.9,0.7);
-  Object circle8(&circle_center8,10000.0,&circle_color8,0,PLANAR, &noise, &cImage2);
+  Object circle8(&circle_center8,150.0,&circle_color8,0,PLANAR, &noise, &cImage2);
   objects.push_back(circle8);
+  
   //viewport
   vector< Pixel > image;
 

@@ -6,11 +6,13 @@
 #include <cstdio>
 #include <fstream>
 #include <string>
+#include <ios>
 
 #define WIDTH 400
 #define HEIGHT 400
 #define TABLE_NUM 256
 
+using std::ios;
 using std::cout;
 using std::endl;
 using std::vector;

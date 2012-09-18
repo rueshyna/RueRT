@@ -7,7 +7,7 @@ double Pixel::max(double a, double b){
 Pixel::Pixel(){}
 
 Color Pixel::rayTrace(Vector3D *ray,Point *p,
-                       int *step,Color *bgColor,vector<Object> *objects,int iObject){
+                       int step,Color *bgColor,vector<Object> *objects,int iObject){
   Color local, reflected, transmitted;
   Vector3D l;
   Vector3D n;
@@ -15,8 +15,9 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
   double minDist(10E6);
   int intersectDot = -1;
 
-  if(*step > 3){
-    return *bgColor;
+  if(step > 3){
+    Color c_last(0,0,0);
+    return c_last;
   }
 
   for(vector<Object>::size_type i = 0; i != objects->size(); ++i){
@@ -46,7 +47,7 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
       }
     }
 
-    Color Ip = (*objects)[intersectDot].color;
+    Color Ip = (*objects)[intersectDot].materialColor(&hitPoint);
     Color Kd(0.5,0.5,0.5);
 
     vector<Color> diffuse_v;
@@ -90,7 +91,7 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
       Color specular = Ip * Ks.multiplication(&rs);
       specular_v.push_back(specular);
 
-      *step += 1;
+      step += 1;
 
       //glossy reflaction matrix
       Matrix gr_matrix;
@@ -108,7 +109,7 @@ Color Pixel::rayTrace(Vector3D *ray,Point *p,
     for(vector<Vector3D>::size_type i = 0; i !=l_vector.size(); ++i){
       double c_dark(dark_v[i]/l_vector.size());
       local = local+(diffuse_v[i] + specular_v[i]).multiplication(&(c_dark));
-      Color Kr(0.2*1.0/(i+2.0),0.2*1.0/(i+2.0),0.2*1.0/(i+2.0));
+      Color Kr(0.2*1.0/(i+1.0),0.2*1.0/(i+1.0),0.2*1.0/(i+1.0));
       reflected = reflected+refColor_v[i]*Kr;
     }
     local = ambient +local;

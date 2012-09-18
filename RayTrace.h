@@ -2,23 +2,39 @@
 #include <cmath>
 #include <iostream>
 #include <cstdlib>
+#include <algorithm>
+#include <cstdio>
+#include <fstream>
+#include <string>
+#include <ios>
 
+#define WIDTH 400
+#define HEIGHT 400
+#define TABLE_NUM 256
+
+using std::ios;
 using std::cout;
 using std::endl;
 using std::vector;
+using std::random_shuffle;
+using std::string;
+using std::ifstream;
+using std::ofstream;
+
+enum MATERIAL_TYPE{LIGHT, WOOD, FIRE, CLOUD, MARBLE, SINE, CYLINDER, GLOBE, PLANAR};
 
 class Vector3D{
   public:
     Vector3D();
     Vector3D(double x, double y, double z);
-    
+
     void normalize();
     Vector3D operator+(Vector3D v);
     Vector3D operator-(Vector3D a);
     Vector3D multiplication(double *value);
     Vector3D cross(Vector3D *a);
     double dot(Vector3D *a);
-    
+
     double getX();
     double getY();
     double getZ();
@@ -39,13 +55,13 @@ class Point{
     double getX();
     double getY();
     double getZ();
-    
+
   private:
     double X;
     double Y;
     double Z;
 };
-  
+
 class Matrix{
   public:
     void setInitRay(Vector3D *vector);
@@ -75,15 +91,40 @@ class Color{
     double r,g,b;
 };
 
+class Noise{
+  public:
+    vector<int> table;
+    vector<Vector3D> table_v;
+    Noise();
+    void initHashTable();
+    Vector3D gamma(Point *p);
+    double omega(double t);
+    double b_omega(Point *uvw, Point *ijk);
+    double noise_funct(Point *p);
+};
+
 class Object{
   public:
     double r;
     int isLight;
     Point center;
     Color color;
-    
+    MATERIAL_TYPE material;
+    Noise noise;
+    vector<Color> cImage;
+    Object(Point *p, double rr, Color *c, int isL, MATERIAL_TYPE m, Noise *n);
+    Object(Point *p, double rr, Color *c, int isL, MATERIAL_TYPE m, Noise *n, vector<Color> *cIm);
+
     double rayIntersection(Vector3D *_ray, Point *p);
-    Object(Point *p, double rr, Color *c, int isL);
+    Color wood_material(Point *p);
+    Color ssin(Point *p);
+    Color materialColor(Point *p);
+    Color marble_material(Point *p);
+    Color cloud_material(Point *p);
+    Color fire_material(Point *p);
+    Color cylinder_material(Point *p);
+    Color globe_material(Point *p);
+    Color planar_material(Point *p);
 };
 
 class Pixel{
@@ -91,8 +132,14 @@ class Pixel{
     Color color;
 
     Pixel();
-    Color rayTrace(Vector3D *v,Point *p, int *step,Color *bgColor, vector<Object> *object,int iObject);
+    Color rayTrace(Vector3D *v,Point *p, int step,Color *bgColor, vector<Object> *object,int iObject);
 
   private:
     double max(double a, double b);
+};
+
+class IO{
+  public:
+    static void save(string filename, vector<Pixel> *image);
+    vector<Color> readPicture(string filename);
 };
